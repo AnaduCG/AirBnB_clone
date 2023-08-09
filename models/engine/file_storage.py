@@ -26,6 +26,7 @@ class FileStorage:
     def reload(self):
         """  deserializes the JSON file to __objects (only if the JSON file """
         from models.base_model import BaseModel
+        """ importing the base model for dictionary evaluation """
 
         if os.path.isfile(self.__file_path):
             with open(self.__file_path, 'r') as f:
