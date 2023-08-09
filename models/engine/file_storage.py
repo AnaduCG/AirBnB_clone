@@ -21,7 +21,7 @@ class FileStorage:
         empty_string = json.dumps(dummy_dict)
         with open(self.__file_path, mode="w", encoding="UTF8") as file:# the w+ is for append mode
             file.write(empty_string)
-    
+
     def reload(self):
         try:
             with open(self.__file_path, mode="r", encoding="UTF8") as file:
