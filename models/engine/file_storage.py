@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import json
-from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -16,10 +15,10 @@ class FileStorage:
     def save(self):
         dummy_dict = {}
         empty_string = ""
-        for key, value in self.__object.items(): #that is empty
+        for key, value in self.__object.items():
             dummy_dict[key] = value.to_dict()
         empty_string = json.dumps(dummy_dict)
-        with open(self.__file_path, mode="w", encoding="UTF8") as file:# the w+ is for append mode
+        with open(self.__file_path, mode="w", encoding="UTF8") as file:
             file.write(empty_string)
     
     def reload(self):
@@ -30,3 +29,4 @@ class FileStorage:
                 self.new(BaseModel(**value))
         except Exception:
             return
+          
