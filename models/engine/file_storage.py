@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import json
-from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -30,3 +29,4 @@ class FileStorage:
                 self.new(BaseModel(**value))
         except Exception:
             return
+          
