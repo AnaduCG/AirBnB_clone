@@ -4,24 +4,23 @@ import os
 
 
 class FileStorage:
-    """ Class that handles storing data in json format """
     __file_path = "file.json"
-    __objects = {}
+    __object = {}
 
     def all(self):
-        """ Method that returns the dictionary (__objects) """
-        return self.__objects
+        return self.__object
 
     def new(self, obj):
-        """ sets in __objects the obj with key <obj class name>.id """
-        key = f"{obj.__class__.__name__}.{str(obj.id)}"
-        self.__objects[key] = obj
+        self.__object[obj.__class__.__name__ + '.' + str(obj.id)] = obj
 
     def save(self):
-        """ serializes __objects to the JSON file (path: __file_path) """
-        json_data = {key: obj.to_dict() for key, obj in self.__objects.items()}
-        with open(self.__file_path, 'w') as f:
-            json.dump(json_data, f)
+        dummy_dict = {}
+        empty_string = ""
+        for key, value in self.__object.items():
+            dummy_dict[key] = value.to_dict()
+        empty_string = json.dumps(dummy_dict)
+        with open(self.__file_path, mode="w", encoding="UTF8") as file:
+            file.write(empty_string)
 
     def reload(self):
         """  deserializes the JSON file to __objects (only if the JSON file """
