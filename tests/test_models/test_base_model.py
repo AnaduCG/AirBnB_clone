@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 """ importing models for base model unittest """
+import os
 import unittest
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 from datetime import datetime
+from unittest.mock import patch
 
 
 class TestBaseModel(unittest.TestCase):
@@ -88,5 +91,77 @@ class TestBaseModel(unittest.TestCase):
                          '2022-08-11T12:34:56.789012')
 
 
+class TestBaseModelFileStorageLink(unittest.TestCase):
+    """testing for BaseModel and FileStorage linking
+
+    Args:
+        unittest (module): python unittest module
+    """
+    def setUp(self):
+        """ setting up resources
+        """
+        self.test_file = "test_file.json"
+        self.file_storage = FileStorage()
+        self.file_storage._FileStorage__file_path = self.test_file
+
+    def tearDown(self):
+        """ clearing up used resources """
+        if os.path.exists(self.test_file):
+            os.remove(self.test_file)
+
+    @patch('models.engine.file_storage.FileStorage.save')
+    def test_base_model_saves_using_file_storage(self, mock_save):
+        """ Create an instance of BaseModel """
+        model = BaseModel()
+        model.save()
+        """ This should call the save method of FileStorage """
+        model = BaseModel()
+
+        """ Assert that the mock save method was called """
+        mock_save.assert_called_once()
+
+        """ Manually reload the data from the test file """
+        self.file_storage.reload()
+
+        """ Check if the BaseModel instance is in the storage """
+        key = 'BaseModel.' + model.id
+        self.assertIn(key, self.file_storage._FileStorage__objects)
+        saved_model = self.file_storage._FileStorage__objects[key]
+
+        """ Check if the saved_model is indeed an instance of BaseModel """
+        self.assertIsInstance(saved_model, BaseModel)
+
+    def test_new_method_called_on_init(self):
+        """ Create an instance of BaseModel using __init__ """
+        model = BaseModel()
+
+        """ Manually reload the data from the test file """
+        self.file_storage.reload()
+
+        """ Check if the BaseModel instance is in the storage """
+        key = 'BaseModel.' + model.id
+        self.assertIn(key, self.file_storage._FileStorage__objects)
+        saved_model = self.file_storage._FileStorage__objects[key]
+
+        """ Check if the saved_model is indeed an instance of BaseModel """
+        self.assertIsInstance(saved_model, BaseModel)
+
+    def test_new_method_not_called_on_dict_init(self):
+        """ Create an instance of BaseModel using dictionary representation """
+        model_dict = {
+            'id': '123',
+            'created_at': '2023-08-10T12:00:00.123456'
+        }
+        model = BaseModel(**model_dict)
+
+        """ Manually reload the data from the test file """
+        self.file_storage.reload()
+
+        """ Check if the BaseModel instance is not in the storage """
+        key = 'BaseModel.' + model.id
+        self.assertNotIn(key, self.file_storage._FileStorage__objects)
+
+
 if __name__ == "__main__":
+    """ entry point """
     unittest.main()
