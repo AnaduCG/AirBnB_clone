@@ -1,6 +1,11 @@
 import json
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -34,8 +39,19 @@ class FileStorage:
                 json_data = json.load(file)
             for key, value in json_data.items():
                 class_name = value["__class__"]
-                del value["__class__"]
-                obj = eval(class_name)(**value)
-                self.__objects[key] = obj
+                if class_name == "BaseModel":
+                    self.__objects[key] = BaseModel(**value)
+                if class_name == "User":
+                    self.__objects[key] = User(**value)
+                if class_name == "Place":
+                    self.__objects[key] = Place(**value)
+                if class_name == "State":
+                    self.__objects[key] = State(**value)
+                if class_name == "City":
+                    self.__objects[key] = City(**value)
+                if class_name == "Amenity":
+                    self.__objects[key] = Amenity(**value)
+                if class_name == "Review":
+                    self.__objects[key] = Review(**value)
         except Exception:
             pass
