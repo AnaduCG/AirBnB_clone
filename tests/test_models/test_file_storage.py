@@ -30,7 +30,7 @@ class TestFileStorage(unittest.TestCase):
             # Check if the returned dictionary matches __objects
             self.assertEqual(all_objects, self.file_storage._FileStorage__object)
 
-    @unittest skipTest("Skip for now")
+    @unittest.skip("Skip for now")
     def test_save_creates_file_and_not_empty(self):
             # Create instances of BaseModel and add them to the FileStorage
             model1 = BaseModel()
