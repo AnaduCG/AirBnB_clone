@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import cmd
 import models
 from models.base_model import BaseModel
@@ -49,6 +50,13 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
     
+    @staticmethod
+    def load_only(list_other):
+        models.storage.reload()
+        index = HBNBCommand.class_key.index(list_other[0])
+        load_dict = models.storage.all()
+        return index, load_dict
+    
     def do_show(self, other):
         """show (className)"""
         if other:
@@ -57,9 +65,7 @@ class HBNBCommand(cmd.Cmd):
                 if len(list_other) == 1:
                     print("** instance id missing **")
                 else:
-                    models.storage.reload()
-                    index = HBNBCommand.class_key.index(list_other[0])
-                    load_dict = models.storage.all()
+                    index, load_dict = HBNBCommand.load_only(list_other)
                     string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
                     dict_text = f"{string}"
                     if dict_text in load_dict:
@@ -70,6 +76,16 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
     
+    def help_destroy(self, list_other):
+        index, load_dict = HBNBCommand.load_only(list_other)
+        string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
+        dict_text = f"{string}"
+        if dict_text in list(load_dict.keys()):
+            del load_dict[dict_text]
+        else:
+            print("** no instance found **")
+        models.storage.save()
+    
     def do_destroy(self, other):
         """destroy (className)"""
         if other:
@@ -78,16 +94,8 @@ class HBNBCommand(cmd.Cmd):
                 if (len(list_other) == 1):
                     print("** instance id missing **")
                 else:
-                    models.storage.reload()
-                    load_dict = models.storage.all()
-                    index = HBNBCommand.class_key.index(list_other[0])
-                    string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
-                    dict_text = f"{string}"
-                    if dict_text in list(load_dict.keys()):
-                        del load_dict[dict_text]
-                    else:
-                        print("** no instance found **")
-                    models.storage.save()
+                    print(list_other)
+                    self.help_destroy(list_other)
         else:
             print("** class name missing **")
     
@@ -149,6 +157,13 @@ class HBNBCommand(cmd.Cmd):
         id = other.split('"')[1]
         return func, id, len(list_brack)
     
+    def Destroy(self, other, classname):
+        func, id, length = HBNBCommand.call_show(other)
+        if length > 1:
+            if func == "destroy()":
+                self.help_destroy([classname, id])
+        else:
+            ...
     def default(self, other):
         models.storage.reload()
         JSONLIST = []
@@ -174,9 +189,7 @@ class HBNBCommand(cmd.Cmd):
                 """CALL SHOW"""
                 func, id, length = HBNBCommand.call_show(other)
                 if func == "show()" and length > 1:
-                    models.storage.reload()
-                    index = HBNBCommand.class_key.index(list_other[0])
-                    load_dict = models.storage.all()
+                    index, load_dict = HBNBCommand.load_only(list_other)
                     string = f"{HBNBCommand.class_key[index]}.{id}"
                     dict_text = f"{string}"
                     string_id = string.split('.')[1]
@@ -184,6 +197,8 @@ class HBNBCommand(cmd.Cmd):
                         print(load_dict[dict_text])
                     else:
                         print("** no instance found **")
+                if func == "destroy()":
+                    self.Destroy(other, list_other[0])
             else:
                 print("** class doesn't exist **")
 
