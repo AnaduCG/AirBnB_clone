@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""import the needed files"""
 import json
 from models.base_model import BaseModel
 from models.user import User

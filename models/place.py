@@ -1,8 +1,11 @@
+"""imports BaseModel"""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """Inherites from Base Model"""
     def __init__(self, *args, **kwargs):
+        """updated places in kwargs"""
         self.city_id = ""
         self.user_id = ""
         self.name = ""
