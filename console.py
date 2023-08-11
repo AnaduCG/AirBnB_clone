@@ -142,6 +142,50 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
     
+    @staticmethod
+    def call_show(other):
+        list_brack = other.split('"')
+        func = list_brack[0].split('.')[-1]  + list_brack[-1]
+        id = other.split('"')[1]
+        return func, id, len(list_brack)
+    
+    def default(self, other):
+        models.storage.reload()
+        JSONLIST = []
+        load_dict = models.storage.all()
+        if other:
+            """CALL ALL"""
+            list_other = other.split(".")
+            class_name = HBNBCommand.class_key
+            if list_other[0] in class_name:
+                if list_other[1] == "all()":
+                    for key in load_dict:
+                        if list_other[0] in key:
+                            JSONLIST.append(str(load_dict[key]))
+                    print(json.dumps(JSONLIST))
+                """CALL COUNT"""
+                if list_other[1] == "count()":
+                    count = 0
+                    for key in load_dict:
+                        if list_other[0] in key:
+                            count = count + 1
+                    print(count)
+                    return
+                """CALL SHOW"""
+                func, id, length = HBNBCommand.call_show(other)
+                if func == "show()" and length > 1:
+                    models.storage.reload()
+                    index = HBNBCommand.class_key.index(list_other[0])
+                    load_dict = models.storage.all()
+                    string = f"{HBNBCommand.class_key[index]}.{id}"
+                    dict_text = f"{string}"
+                    string_id = string.split('.')[1]
+                    if dict_text in load_dict and id == string_id:
+                        print(load_dict[dict_text])
+                    else:
+                        print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
