@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -10,7 +9,7 @@ class FileStorage:
     def all(self):
         """return object of dictionary"""
         return self.__objects
-
+    
     def new(self, obj):
         """create a new object
 
@@ -19,18 +18,17 @@ class FileStorage:
         """
         class_key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[class_key] = obj
-
+    
     def save(self):
-        """serialize object to json file"""
+        """serilize object to json file"""
         dummy_dict = {}
         for key, value in self.__objects.items():
             dummy_dict[key] = value.to_dict()
-        with open(self.__file_path, mode="w", encoding="UTF8") as file:
-
+        with open(self.__file_path, mode="w", encoding="UTF8") as file
             json.dump(dummy_dict, file)
-
+    
     def reload(self):
-        """deserialize object from json file"""
+        """deserilize object from json file"""
         try:
             with open(self.__file_path, mode="r", encoding="UTF8") as file:
                 json_data = json.load(file)
