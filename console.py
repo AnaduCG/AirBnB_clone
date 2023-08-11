@@ -36,6 +36,7 @@ class HBNBCommand(cmd.Cmd):
             if self.validate(other):
                 new_insts = list(HBNBCommand.class_names.values())[0]()
                 print(new_insts.id)
+                models.storage.save()
         else:
             print("** class name missing **")
     
@@ -82,26 +83,24 @@ class HBNBCommand(cmd.Cmd):
     
     def do_all(self, other):
         """all (ClassName)"""
+        models.storage.reload()
+        JSONLIST = []
+        load_dict = models.storage.all()
         if other:
-            models.storage.reload()
-            JSONLIST = []
-            load_dict = models.storage.all()
-            if other:
-                list_other = other.split(" ")
-                class_name = "BaseModel"
-                if list_other[0] == class_name:
-                    for key in load_dict:
-                        if list_other[0] in key:
-                            JSONLIST.append(str(load_dict[key]))
-                    print(json.dumps(JSONLIST))
-                else:
-                    print("** class doesn't exist **")
-            else:
+            list_other = other.split(" ")
+            class_name = "BaseModel"
+            if list_other[0] == class_name:
                 for key in load_dict:
-                    JSONLIST.append(str(load_dict[key]))
+                    if list_other[0] in key:
+                        JSONLIST.append(str(load_dict[key]))
                 print(json.dumps(JSONLIST))
+            else:
+                print("** class doesn't exist **")
         else:
-            print("** class name missing **")
+            for key in load_dict:
+                JSONLIST.append(str(load_dict[key]))
+            print(json.dumps(JSONLIST))
+                
     def do_update(self, other):
         """update (className)"""
         if other:
