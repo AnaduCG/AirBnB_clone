@@ -52,6 +52,7 @@ class HBNBCommand(cmd.Cmd):
     
     @staticmethod
     def load_only(list_other):
+        """reload the json file"""
         models.storage.reload()
         index = HBNBCommand.class_key.index(list_other[0])
         load_dict = models.storage.all()
@@ -77,6 +78,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
     
     def help_destroy(self, list_other):
+        """help function to distroy the object from the json file"""
         index, load_dict = HBNBCommand.load_only(list_other)
         string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
         dict_text = f"{string}"
@@ -152,19 +154,35 @@ class HBNBCommand(cmd.Cmd):
     
     @staticmethod
     def call_show(other):
+        """call the get the name of func, id and length
+
+        Args:
+            other (input in cmd): data from command line
+
+        Returns:
+            tuple: return tuple of function name and id
+        """
         list_brack = other.split('"')
         func = list_brack[0].split('.')[-1]  + list_brack[-1]
         id = other.split('"')[1]
         return func, id, len(list_brack)
     
     def Destroy(self, other, classname):
+        """use help documentation just making code short
+
+        Args:
+            other (str): data from command line
+            classname (str): classname
+        """
         func, id, length = HBNBCommand.call_show(other)
         if length > 1:
             if func == "destroy()":
                 self.help_destroy([classname, id])
         else:
             ...
+    
     def default(self, other):
+        """default when invalid is inputed in the command line"""
         models.storage.reload()
         JSONLIST = []
         load_dict = models.storage.all()
@@ -203,4 +221,5 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
 
 if __name__ == "__main__":
+    """entry point infinit loop"""
     HBNBCommand().cmdloop()
