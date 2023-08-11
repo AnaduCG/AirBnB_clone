@@ -1,5 +1,6 @@
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -37,4 +38,4 @@ class FileStorage:
                 obj = eval(class_name)(**value)
                 self.__objects[key] = obj
         except Exception:
-            ...
+            pass
