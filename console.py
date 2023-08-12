@@ -136,7 +136,8 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     load_dict = models.storage.all()
                     index = HBNBCommand.class_key.index(list_other[0])
-                    dict_text = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
+                    x = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
+                    dict_text = x
                 if dict_text not in load_dict:
                     print("** no instance found **")
                 elif len(list_other) == 2:
