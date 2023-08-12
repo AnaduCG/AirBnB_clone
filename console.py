@@ -21,23 +21,15 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_quit(self):
-        """help documentated for quit"""
-        print("quit the program when called")
 
     def do_EOF(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_EOF(self):
-        """help documentated for EOF"""
-        print("exit the program")
-    
+
     def emptyline(self) -> bool:
         """emptyline"""
         pass
-
+    
     def validate(self, other):
         """validate other input"""
         list_paras = other.split(" ")
@@ -57,10 +49,6 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.save()
         else:
             print("** class name missing **")
-    
-    def help_create(self):
-        """creates a new class"""
-        print("create a new class")
     
     @staticmethod
     def load_only(list_other):
@@ -89,11 +77,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
     
-    def help_show(self):
-        """show the dictionary for classname"""
-        print("dictionary of class name")
-    
-    def handle_destroy(self, list_other):
+    def help_destroy(self, list_other):
         """help function to distroy the object from the json file"""
         index, load_dict = HBNBCommand.load_only(list_other)
         string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
@@ -115,10 +99,6 @@ class HBNBCommand(cmd.Cmd):
                     self.help_destroy(list_other)
         else:
             print("** class name missing **")
-    
-    def help_destroy(self):
-        """destroy an instance and save it"""
-        print("destroy instance from a json file")
     
     def handle_all(self, list_other):
         class_name = HBNBCommand.class_key
@@ -143,11 +123,7 @@ class HBNBCommand(cmd.Cmd):
             for key in load_dict:
                 JSONLIST.append(str(load_dict[key]))
             print(json.dumps(JSONLIST))
-
-    def help_all(self):
-        """list of all instances in the json file"""
-        print("gets all instances in the json file")
-    
+                
     def do_update(self, other):
         """update (className)"""
         models.storage.reload()
@@ -179,10 +155,6 @@ class HBNBCommand(cmd.Cmd):
                     models.storage.save()
         else:
             print("** class name missing **")
-    
-    def help_update(self):
-        """help to update the class"""
-        print("update class")
     
     @staticmethod
     def call_show(other):
