@@ -7,6 +7,7 @@ class State(BaseModel):
     """inherites from BaseModel"""
 
     name = ""
+
     def __init__(self, *args, **kwargs):
         """update kwargs with state"""
         super().__init__(*args, **kwargs)

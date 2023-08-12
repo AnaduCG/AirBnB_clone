@@ -10,6 +10,7 @@ class Amenity(BaseModel):
         BaseModel (_type_): _description_
     """
     name = ""
+
     def __init__(self, *args, **kwargs):
         """
         inherite from BaseModel and adds a name

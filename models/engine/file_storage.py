@@ -15,11 +15,11 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
-    
+
     def all(self):
         """return object of dictionary"""
         return self.__objects
-    
+
     def new(self, obj):
         """create a new object
 
@@ -28,7 +28,7 @@ class FileStorage:
         """
         class_key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[class_key] = obj
-    
+
     def save(self):
         """serilize object to json file"""
         dummy_dict = {}
@@ -36,7 +36,7 @@ class FileStorage:
             dummy_dict[key] = value.to_dict()
         with open(self.__file_path, mode="w", encoding="UTF8") as file:
             json.dump(dummy_dict, file)
-    
+
     def reload(self):
         """deserilize object from json file"""
         try:

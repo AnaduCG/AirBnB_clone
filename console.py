@@ -16,8 +16,8 @@ class HBNBCommand(cmd.Cmd):
     class_key = ['BaseModel', 'User', 'Place', 'State',
                  'City', 'Amenity', 'Review']
     class_val = [BaseModel, User, Place, State,
-                City, Amenity, Review]
-    
+                 City, Amenity, Review]
+
     def do_quit(self, other):
         """Quit command to exit the program"""
         return True
@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self) -> bool:
         """emptyline"""
         pass
-    
+
     def validate(self, other):
         """validate other input"""
         list_paras = other.split(" ")
@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
             return False
         else:
             return True
-    
+
     def do_create(self, other):
         """create (className)"""
         if other:
@@ -49,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.save()
         else:
             print("** class name missing **")
-    
+
     @staticmethod
     def load_only(list_other):
         """reload the json file"""
@@ -57,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
         index = HBNBCommand.class_key.index(list_other[0])
         load_dict = models.storage.all()
         return index, load_dict
-    
+
     def do_show(self, other):
         """show (className)"""
         if other:
@@ -76,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
                         print("** no instance found **")
         else:
             print("** class name missing **")
-    
+
     def handle_destroy(self, list_other):
         """help function to distroy the object from the json file"""
         index, load_dict = HBNBCommand.load_only(list_other)
@@ -87,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
         models.storage.save()
-    
+
     def do_destroy(self, other):
         """destroy (className)"""
         if other:
@@ -99,14 +99,14 @@ class HBNBCommand(cmd.Cmd):
                     self.handle_destroy(list_other)
         else:
             print("** class name missing **")
-    
+
     def handle_all(self, list_other):
         class_name = HBNBCommand.class_key
         if list_other[0] in class_name:
             return True
         else:
             print("** class doesn't exist **")
-    
+
     def do_all(self, other):
         """all or all (ClassName)"""
         models.storage.reload()
@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             for key in load_dict:
                 JSONLIST.append(str(load_dict[key]))
             print(json.dumps(JSONLIST))
-                
+
     def do_update(self, other):
         """update (className)"""
         models.storage.reload()
@@ -134,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
                     print("** instance id missing **")
                     return
                 else:
-                    load_dict = models.storage.all()#data in json file
+                    load_dict = models.storage.all()
                     index = HBNBCommand.class_key.index(list_other[0])
                     dict_text = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
                 if dict_text not in load_dict:
@@ -155,7 +155,7 @@ class HBNBCommand(cmd.Cmd):
                     models.storage.save()
         else:
             print("** class name missing **")
-    
+
     @staticmethod
     def call_show(other):
         """call the get the name of func, id and length
@@ -168,12 +168,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if '"' in other:
             list_brack = other.split('"')
-            func = list_brack[0].split('.')[-1]  + list_brack[-1]
+            func = list_brack[0].split('.')[-1] + list_brack[-1]
             id = other.split('"')[1]
             return func, id, len(list_brack)
         else:
             return False
-    
+
     def Destroy(self, other, classname):
         """use help documentation just making code short
 
@@ -187,7 +187,7 @@ class HBNBCommand(cmd.Cmd):
                 self.handle_destroy([classname, id])
         else:
             ...
-    
+
     def default(self, other):
         """default when invalid is inputed in the command line"""
         if other:

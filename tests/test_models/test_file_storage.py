@@ -12,7 +12,8 @@ class TestFileStorage(unittest.TestCase):
         """ setting up resources """
         self.test_file = "test_file.json"
         with open(self.test_file, "w") as f:
-            f.write('{"BaseModel.123": {"id": "123","created_at": "2023-08-10T12:00:00"}}')
+            f.write('{"BaseModel.123": {"id": "123",' +
+                    '"created_at": "2023-08-10T12:00:00"}}')
         self.file_storage = FileStorage()
         self.file_storage._FileStorage__file_path = self.test_file
 
@@ -46,7 +47,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertTrue(os.path.exists(self.file_storage.
                                        _FileStorage__file_path))
         self.assertTrue(os.path.getsize(self.file_storage.
-                                       _FileStorage__file_path) > 0)
+                                        _FileStorage__file_path) > 0)
 
     def test_reload_with_existing_file(self):
 
@@ -59,8 +60,11 @@ class TestFileStorage(unittest.TestCase):
         self.file_storage.reload()
 
         # Check if the expected object is in __objects
-        self.assertIn('BaseModel.' + model1.id, self.file_storage._FileStorage__objects)
-        self.assertIsInstance(self.file_storage._FileStorage__objects['BaseModel.' + model1.id], BaseModel)
+        self.assertIn('BaseModel.' + model1.id,
+                      self.file_storage._FileStorage__objects)
+        self.assertIsInstance(self.file_storage.
+                              _FileStorage__objects['BaseModel.' + model1.id],
+                              BaseModel)
 
     def test_reload_with_non_existing_file(self):
         self.file_storage._FileStorage__file_path = "non_existing_file.json"
