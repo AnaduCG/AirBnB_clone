@@ -31,6 +31,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, other):
         """Quit command to exit the program"""
+        print()
         return True
 
     def emptyline(self) -> bool:
@@ -44,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return False
         else:
-            return Tru
+            return True
 
     def do_create(self, other):
         """create (className)"""
