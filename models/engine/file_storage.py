@@ -11,8 +11,11 @@ from models.review import Review
 
 
 class FileStorage:
+    """A class to manage objects and their data in a JSON file."""
+
     __file_path = "file.json"
     __objects = {}
+    
     def all(self):
         """return object of dictionary"""
         return self.__objects
