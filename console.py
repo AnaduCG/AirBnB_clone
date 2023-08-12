@@ -34,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def emptyline(self) -> bool:
+    def emptyline(self):
         """emptyline"""
         pass
 
