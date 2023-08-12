@@ -226,6 +226,19 @@ class HBNBCommand(cmd.Cmd):
                     return
                 if func == "destroy()":
                     self.Destroy(other, list_other[0])
+                    return
+                """CALL UPDATE"""
+                spt = list_other[1].split('"')
+                if len(spt) >= 7:
+                    name, id, attr, val = spt[0], spt[1], spt[3], spt[5]
+                    string = f"{list_other[0]} {id} {attr} {val}"
+                    if name == "update(":
+                        self.do_update(string)
+                        return
+                elif len(spt) == 6 or len(spt) == 5:
+                    print("** value missing **")
+                elif len(spt) == 3:
+                    print("** attribute name missing **")
 
 
 if __name__ == "__main__":
