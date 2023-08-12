@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """import BaseModel to be inherited"""
 from models.base_model import BaseModel
 
