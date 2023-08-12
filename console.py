@@ -77,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
     
-    def help_destroy(self, list_other):
+    def handle_destroy(self, list_other):
         """help function to distroy the object from the json file"""
         index, load_dict = HBNBCommand.load_only(list_other)
         string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
@@ -96,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
                 if (len(list_other) == 1):
                     print("** instance id missing **")
                 else:
-                    self.help_destroy(list_other)
+                    self.handle_destroy(list_other)
         else:
             print("** class name missing **")
     
@@ -184,7 +184,7 @@ class HBNBCommand(cmd.Cmd):
         func, id, length = HBNBCommand.call_show(other)
         if length > 1:
             if func == "destroy()":
-                self.help_destroy([classname, id])
+                self.handle_destroy([classname, id])
         else:
             ...
     
@@ -194,6 +194,7 @@ class HBNBCommand(cmd.Cmd):
             """CALL ALL"""
             list_other = other.split(".")
             class_name = HBNBCommand.class_key
+            load_dict = models.storage.all()
             if list_other[0] in class_name:
                 if list_other[1] == "all()":
                     self.do_all(list_other[0])
@@ -209,7 +210,6 @@ class HBNBCommand(cmd.Cmd):
                 """CALL SHOW"""
                 if self.call_show(other):
                     models.storage.reload()
-                    load_dict = models.storage.all()
                     func, id, length = HBNBCommand.call_show(other)
                     if func == "show()" and length > 1:
                         index, load_dict = HBNBCommand.load_only(list_other)
