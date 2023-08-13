@@ -188,7 +188,7 @@ class HBNBCommand(cmd.Cmd):
                 self.handle_destroy([classname, id])
         else:
             ...
-
+    
     def default(self, other):
         """default when invalid is inputed in the command line"""
         if other:
@@ -228,17 +228,27 @@ class HBNBCommand(cmd.Cmd):
                     self.Destroy(other, list_other[0])
                     return
                 """CALL UPDATE"""
-                spt = list_other[1].split('"')
-                if len(spt) >= 7:
-                    name, id, attr, val = spt[0], spt[1], spt[3], spt[5]
-                    string = f"{list_other[0]} {id} {attr} {val}"
-                    if name == "update(":
-                        self.do_update(string)
-                        return
-                elif len(spt) == 6 or len(spt) == 5:
-                    print("** value missing **")
-                elif len(spt) == 3:
-                    print("** attribute name missing **")
+                if '{' in other and '}' in other and 'update' in other:
+                    id = list_other[1].split('"')[1]
+                    str_v1 = other.split('(')[1].split('{')[1].split('}')[0]
+                    va = str_v1.split(',')
+                    for str_i in va:
+                        var = str_i.split(':')
+                        ss = f'{list_other[0]} {id} {var[0]} {var[1]}'
+                        no_quotes = ss.replace("'", "").replace("\"", "")
+                        self.do_update(no_quotes)
+                else:
+                    spt = list_other[1].split('"')
+                    if len(spt) >= 7:
+                        name, id, attr, val = spt[0], spt[1], spt[3], spt[5]
+                        string = f"{list_other[0]} {id} {attr} {val}"
+                        if name == "update(":
+                            self.do_update(string)
+                            return
+                    elif len(spt) == 6 or len(spt) == 5:
+                        print("** value missing **")
+                    elif len(spt) == 3:
+                        print("** attribute name missing **")
 
 
 if __name__ == "__main__":
