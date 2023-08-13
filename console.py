@@ -188,7 +188,7 @@ class HBNBCommand(cmd.Cmd):
                 self.handle_destroy([classname, id])
         else:
             ...
-    
+
     def default(self, other):
         """default when invalid is inputed in the command line"""
         if other:
