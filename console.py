@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""imported need models"""
 import cmd
 import models
 from models.base_model import BaseModel
@@ -12,6 +13,8 @@ import json
 
 
 class HBNBCommand(cmd.Cmd):
+    """class to handle the console"""
+
     prompt = "(hbnb) "
     class_key = ['BaseModel', 'User', 'Place', 'State',
                  'City', 'Amenity', 'Review']
@@ -21,17 +24,11 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_quit(self):
-        print("\nquite the program\n")
-    
+
     def do_EOF(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_EOF(self):
-        print("\nquite the program\n")
-    
+
     def emptyline(self) -> bool:
         """emptyline"""
         pass
