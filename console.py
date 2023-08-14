@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""imported need models"""
 import cmd
 import models
 from models.base_model import BaseModel
@@ -12,30 +13,26 @@ import json
 
 
 class HBNBCommand(cmd.Cmd):
+    """class to handle the console"""
+
     prompt = "(hbnb) "
     class_key = ['BaseModel', 'User', 'Place', 'State',
                  'City', 'Amenity', 'Review']
     class_val = [BaseModel, User, Place, State,
-                City, Amenity, Review]
-    
+                 City, Amenity, Review]
+
     def do_quit(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_quit(self):
-        print("\nquite the program\n")
-    
+
     def do_EOF(self, other):
         """Quit command to exit the program"""
         return True
-    
-    def help_EOF(self):
-        print("\nquite the program\n")
-    
+
     def emptyline(self) -> bool:
         """emptyline"""
-        ...
-    
+        pass
+
     def validate(self, other):
         """validate other input"""
         list_paras = other.split(" ")
@@ -44,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
             return False
         else:
             return True
-    
+
     def do_create(self, other):
         """create (className)"""
         if other:
@@ -55,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.save()
         else:
             print("** class name missing **")
-    
+
     @staticmethod
     def load_only(list_other):
         """reload the json file"""
@@ -63,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
         index = HBNBCommand.class_key.index(list_other[0])
         load_dict = models.storage.all()
         return index, load_dict
-    
+
     def do_show(self, other):
         """show (className)"""
         if other:
@@ -82,8 +79,8 @@ class HBNBCommand(cmd.Cmd):
                         print("** no instance found **")
         else:
             print("** class name missing **")
-    
-    def help_destroy(self, list_other):
+
+    def handle_destroy(self, list_other):
         """help function to distroy the object from the json file"""
         index, load_dict = HBNBCommand.load_only(list_other)
         string = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
@@ -93,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
         models.storage.save()
-    
+
     def do_destroy(self, other):
         """destroy (className)"""
         if other:
@@ -102,11 +99,17 @@ class HBNBCommand(cmd.Cmd):
                 if (len(list_other) == 1):
                     print("** instance id missing **")
                 else:
-                    print(list_other)
-                    self.help_destroy(list_other)
+                    self.handle_destroy(list_other)
         else:
             print("** class name missing **")
-    
+
+    def handle_all(self, list_other):
+        class_name = HBNBCommand.class_key
+        if list_other[0] in class_name:
+            return True
+        else:
+            print("** class doesn't exist **")
+
     def do_all(self, other):
         """all or all (ClassName)"""
         models.storage.reload()
@@ -114,19 +117,16 @@ class HBNBCommand(cmd.Cmd):
         load_dict = models.storage.all()
         if other:
             list_other = other.split(" ")
-            class_name = HBNBCommand.class_key
-            if list_other[0] in class_name:
+            if self.handle_all(list_other):
                 for key in load_dict:
                     if list_other[0] in key:
                         JSONLIST.append(str(load_dict[key]))
                 print(json.dumps(JSONLIST))
-            else:
-                print("** class doesn't exist **")
         else:
             for key in load_dict:
                 JSONLIST.append(str(load_dict[key]))
             print(json.dumps(JSONLIST))
-                
+
     def do_update(self, other):
         """update (className)"""
         models.storage.reload()
@@ -135,10 +135,12 @@ class HBNBCommand(cmd.Cmd):
                 list_other = other.split()
                 if (len(list_other) == 1):
                     print("** instance id missing **")
+                    return
                 else:
-                    load_dict = models.storage.all()#data in json file
+                    load_dict = models.storage.all()
                     index = HBNBCommand.class_key.index(list_other[0])
-                    dict_text = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
+                    x = f"{HBNBCommand.class_key[index]}.{list_other[1]}"
+                    dict_text = x
                 if dict_text not in load_dict:
                     print("** no instance found **")
                 elif len(list_other) == 2:
@@ -157,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
                     models.storage.save()
         else:
             print("** class name missing **")
-    
+
     @staticmethod
     def call_show(other):
         """call the get the name of func, id and length
@@ -168,11 +170,14 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             tuple: return tuple of function name and id
         """
-        list_brack = other.split('"')
-        func = list_brack[0].split('.')[-1]  + list_brack[-1]
-        id = other.split('"')[1]
-        return func, id, len(list_brack)
-    
+        if '"' in other:
+            list_brack = other.split('"')
+            func = list_brack[0].split('.')[-1] + list_brack[-1]
+            id = other.split('"')[1]
+            return func, id, len(list_brack)
+        else:
+            return False
+
     def Destroy(self, other, classname):
         """use help documentation just making code short
 
@@ -183,25 +188,21 @@ class HBNBCommand(cmd.Cmd):
         func, id, length = HBNBCommand.call_show(other)
         if length > 1:
             if func == "destroy()":
-                self.help_destroy([classname, id])
+                self.handle_destroy([classname, id])
         else:
             ...
-    
+
     def default(self, other):
         """default when invalid is inputed in the command line"""
-        models.storage.reload()
-        JSONLIST = []
-        load_dict = models.storage.all()
         if other:
             """CALL ALL"""
             list_other = other.split(".")
             class_name = HBNBCommand.class_key
+            load_dict = models.storage.all()
             if list_other[0] in class_name:
                 if list_other[1] == "all()":
-                    for key in load_dict:
-                        if list_other[0] in key:
-                            JSONLIST.append(str(load_dict[key]))
-                    print(json.dumps(JSONLIST))
+                    self.do_all(list_other[0])
+                    return
                 """CALL COUNT"""
                 if list_other[1] == "count()":
                     count = 0
@@ -211,20 +212,47 @@ class HBNBCommand(cmd.Cmd):
                     print(count)
                     return
                 """CALL SHOW"""
-                func, id, length = HBNBCommand.call_show(other)
-                if func == "show()" and length > 1:
-                    index, load_dict = HBNBCommand.load_only(list_other)
-                    string = f"{HBNBCommand.class_key[index]}.{id}"
-                    dict_text = f"{string}"
-                    string_id = string.split('.')[1]
-                    if dict_text in load_dict and id == string_id:
-                        print(load_dict[dict_text])
-                    else:
-                        print("** no instance found **")
+                if self.call_show(other):
+                    models.storage.reload()
+                    func, id, length = HBNBCommand.call_show(other)
+                    if func == "show()" and length > 1:
+                        index, load_dict = HBNBCommand.load_only(list_other)
+                        string = f"{HBNBCommand.class_key[index]}.{id}"
+                        dict_text = f"{string}"
+                        string_id = string.split('.')[1]
+                        if dict_text in load_dict and id == string_id:
+                            print(load_dict[dict_text])
+                            return
+                        else:
+                            print("** no instance found **")
+                else:
+                    return
                 if func == "destroy()":
                     self.Destroy(other, list_other[0])
-            else:
-                print("** class doesn't exist **")
+                    return
+                """CALL UPDATE"""
+                if '{' in other and '}' in other and 'update' in other:
+                    id = list_other[1].split('"')[1]
+                    str_v1 = other.split('(')[1].split('{')[1].split('}')[0]
+                    va = str_v1.split(',')
+                    for str_i in va:
+                        var = str_i.split(':')
+                        ss = f'{list_other[0]} {id} {var[0]} {var[1]}'
+                        no_quotes = ss.replace("'", "").replace("\"", "")
+                        self.do_update(no_quotes)
+                else:
+                    spt = list_other[1].split('"')
+                    if len(spt) >= 7:
+                        name, id, attr, val = spt[0], spt[1], spt[3], spt[5]
+                        string = f"{list_other[0]} {id} {attr} {val}"
+                        if name == "update(":
+                            self.do_update(string)
+                            return
+                    elif len(spt) == 6 or len(spt) == 5:
+                        print("** value missing **")
+                    elif len(spt) == 3:
+                        print("** attribute name missing **")
+
 
 if __name__ == "__main__":
     """entry point infinit loop"""
