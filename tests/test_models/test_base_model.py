@@ -14,7 +14,14 @@ class TestBaseModel(unittest.TestCase):
         """ setting up needed resources """
         self.models = [BaseModel() for _ in range(10)]
         self.model = BaseModel()
-
+    
+    def test_str_representation(self):
+        i = BaseModel()
+        i.name = "My First Model"
+        i.my_number = 89
+        expected_output = f"[BaseModel] ({i.id}) {i.__dict__}"
+        self.assertEqual(str(i), expected_output)
+    
     def test_id_str(self):
         """ checking id data type is string """
         self.assertTrue(isinstance(self.model.id, str))
