@@ -1,6 +1,6 @@
 
 .locations,
-.amenities {
+div.container>section.filters>.amenities {
     height: 100%;
     width: 25%;
     padding-left: 10px;
@@ -11,13 +11,13 @@
 }
 
 .locations>h3,
-.amenities>h3 {
+div.container>section.filters>.amenities>h3 {
     font-weight: 600;
     width: 25%;
 }
 
 .locations>h4,
-.amenities>h4 {
+div.container>section.filters>.amenities>h4 {
     font-weight: 400;
     font-size: 14px;
     margin-top: -10px;

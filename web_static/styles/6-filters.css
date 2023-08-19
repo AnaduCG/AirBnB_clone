@@ -27,7 +27,7 @@ section button:hover {
 
 
 .locations,
-.amenities {
+div.container>section.filters>.amenities {
     height: 100%;
     width: 25%;
 }
@@ -37,14 +37,14 @@ section button:hover {
 }
 
 .locations>h3,
-.amenities>h3 {
+div.container>section.filters>.amenities>h3 {
     font-weight: 600;
     width: 25%;
     padding-left: 40px;
 }
 
 .locations>h4,
-.amenities>h4 {
+div.container>section.filters>.amenities>h4 {
     font-weight: 400;
     font-size: 14px;
     margin-top: -10px;
@@ -65,6 +65,6 @@ ul.popover>li>h2 {
 }
 
 div.locations:hover ul.popover,
-div.amenities:hover ul.popover {
+div.container>section.filters>div.amenities:hover ul.popover {
     display: block;
 }
